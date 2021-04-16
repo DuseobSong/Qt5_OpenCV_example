@@ -79,9 +79,6 @@ public slots:
     void cbCornersClicked(void);
     void cbCannyClicked(void);
 
-    // Fourier image
-    void fourier_transform(Mat src);
-
     // record option
     void record(void);
 

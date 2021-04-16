@@ -461,46 +461,6 @@ void MainWindow::cbCannyClicked(void){
     }
 }
 
-void MainWindow::fourier_transform(Mat src){
-    Mat fimage, dftA, dftA2[2], magImage, magF;
-    QImage imgF;
-    src.convertTo(fimage, CV_32F);
-
-    int x, y;
-    float fValue;
-
-    for(y = 0; y < fimage.rows; y++){
-        for(x = 0; x < fimage.cols; x++){
-            fValue = fimage.at<float>(x, y);
-            //if((x + y)%2 == 1)  // odd number
-            if((x+y)%2 == 1 && fValue != 0) fimage.at<float>(y, x) = -fValue;
-        }
-    }
-
-    dft(fimage, dftA, DFT_COMPLEX_OUTPUT);
-    split(dftA, dftA2);
-    qDebug() << dftA.cols << ", " << dftA2[0].cols << endl;
-    // Spectrum
-    magnitude(dftA2[0], dftA2[1], magF);
-    qDebug() << magF.cols << endl;
-    magF += Scalar(1);
-    log(magF, magF);
-
-    normalize(magF, magImage, 0, 255, NORM_MINMAX, CV_8U);
-
-    /*
-    // Phase angle
-    Mat angleF;
-    phase(dftA2[0], dftA2[1], angleF);
-
-    Mat angleImage;
-    normalize(angleF, angleImage, 0, 255, NORM_MINMAX, CV_8U);
-    */
-
-    imgF = QImage(magImage.data, magImage.cols, magImage.rows, QImage::Format_Grayscale8);
-    ui->imageF->setPixmap(QPixmap::fromImage(imgF).scaled(ui->imageF->width(), ui->imageF->height(), Qt::KeepAspectRatio));
-}
-
 void MainWindow::record(void){
     if(this->RECORDING_START){
         ui->PBTrecord->setText("RECORD");
